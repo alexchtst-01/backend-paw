@@ -16,25 +16,25 @@ project-folder/
 
    ├── controllers/
 
-      ├── userController.js
+    ├── userController.js
 
-      └── productController.js
+    └── productController.js
 
    ├── middleware/
 
-      ├── auth.js
+    ├── auth.js
 
    ├── models/
 
-      ├── userModel.js
+    ├── userModel.js
 
-      └── productModel.js
+    └── productModel.js
 
    ├── routes/
 
-      ├── userRoute.js
+    ├── userRoute.js
 
-      └── productRoute.js
+    └── productRoute.js
 
 ├── .env
 
