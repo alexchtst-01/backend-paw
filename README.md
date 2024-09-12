@@ -14,23 +14,23 @@ project-folder/
 
 ├── src/
 
-   ├── controllers/
+  ├── controllers/
 
     ├── userController.js
 
     └── productController.js
 
-   ├── middleware/
+  ├── middleware/
 
     ├── auth.js
 
-   ├── models/
+  ├── models/
 
     ├── userModel.js
 
     └── productModel.js
 
-   ├── routes/
+  ├── routes/
 
     ├── userRoute.js
 
