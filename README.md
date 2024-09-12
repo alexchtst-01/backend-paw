@@ -12,19 +12,33 @@
 ### Struktur Forlder
 project-folder/
 ├── src/
+
 |   ├── controllers/
+
 |   │   ├── userController.js
+
 |   │   └── productController.js
+
 |   ├── middleware/
+
 │   |   ├── auth.js
+
 |   ├── models/
+
 │   |   ├── userModel.js
+
 |   │   └── productModel.js
+
 |   ├── routes/
+
 |   │   ├── userRoute.js
+
 |   │   └── productRoute.js
+
 ├── .env
+
 └── index.js
+
 
 ### NAMA KELOMPOK
 
