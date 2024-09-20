@@ -14,6 +14,17 @@ const server = express();
 server.use(cors());
 server.use(express.json());
 
+mongoose.connect(process.env.MONGO_STRING);
+mongoose.connection.on("error", err => {
+  console.log("err", err)
+})
+mongoose.connection.on("connected", (err, res) => {
+  console.log("conection success to mongodb atlas")
+  server.listen(process.env.SERVER_PORT, () => {
+    console.log(`server up and running in localhost:${process.env.SERVER_PORT}`)
+  })
+})
+
 server.get("/", (req, res) => {
   res.send("Backend server PAW kelompok 5");
 });
@@ -23,13 +34,3 @@ server.use("/api/v1", userRoute);
 server.use("/api/v1", productRoute);
 
 server.use(morgan("dev"));
-
-mongoose
-  .connect(process.env.MONGO_STRING)
-  .then(() => {
-    console.log("Connected to MongoDB Atlas");
-    server.listen(process.env.SERVER_PORT, () => {
-      console.log(`Server run and up in port ${process.env.SERVER_PORT}`);
-    });
-  })
-  .catch((error) => console.log("Connection error:", error));
