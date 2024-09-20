@@ -1,5 +1,18 @@
 import Product from "../models/ProductModel.js";
 
+// get the product by id
+export const getProductbyID = async (req, res) => {
+  try {
+    const {productID} = req.params;
+    const product = await Product.findOne(productID);
+    if (!product) return res.status(404).json({msg: "product not found"})
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(400).json({ msg: error.message });
+  }
+};
+
+// get all the product
 export const getProduct = async (req, res) => {
   try {
     const product = await Product.find().populate("userID");
@@ -9,13 +22,14 @@ export const getProduct = async (req, res) => {
   }
 };
 
+// create the product
 export const createProduct = async (req, res) => {
   try {
     const product = new Product(req.body);
     await product.save();
     res.status(201).json({ msg: "data berhasil dibuat" });
   } catch (error) {
-    res.status(501).json({ msh: error.message });
+    res.status(501).json({ msg: error.message });
   }
 };
 
