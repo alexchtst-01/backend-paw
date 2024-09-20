@@ -14,6 +14,16 @@ const server = express();
 server.use(cors());
 server.use(express.json());
 
+server.use(morgan("dev"));
+
+server.get("/", (req, res) => {
+  res.send("Backend server PAW kelompok 5");
+});
+
+server.use("/api/v1", loginRoute);
+server.use("/api/v1", userRoute);
+server.use("/api/v1", productRoute);
+
 mongoose.connect(process.env.MONGO_STRING);
 mongoose.connection.on("error", err => {
   console.log("err", err)
@@ -24,13 +34,3 @@ mongoose.connection.on("connected", (err, res) => {
     console.log(`server up and running in localhost:${process.env.SERVER_PORT}`)
   })
 })
-
-server.get("/", (req, res) => {
-  res.send("Backend server PAW kelompok 5");
-});
-
-server.use("/api/v1", loginRoute);
-server.use("/api/v1", userRoute);
-server.use("/api/v1", productRoute);
-
-server.use(morgan("dev"));
