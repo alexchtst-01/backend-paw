@@ -6,13 +6,15 @@ import {
   updateUser,
   deleteUser,
 } from "../controllers/userController.js";
+import { verify } from "../middleware/auth.js";
 
 const router = express.Router();
 
-router.get("/users", getUser);
+// need protection routes
+router.get("/users", verify, getUser);
 router.get("/users/:id", getUserbyId);
 router.post("/users", createUser);
 router.patch("/users/:id", updateUser);
-router.delete("/users/:id", deleteUser);
+router.delete("/users/:id", verify, deleteUser);
 
 export default router;

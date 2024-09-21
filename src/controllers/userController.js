@@ -1,11 +1,16 @@
 import User from "../models/UserModel.js";
+import bcrypt from "bcrypt";
 
 export const getUser = async (req, res) => {
   try {
-    const user = await User.find();
-    res.status(200).json(user);
+    if (!req.superAccess) {
+      return res.status(403).json({ msg: "maaf anda bukan admin" });
+    }
+
+    const users = await User.find();
+    return res.status(200).json(users);
   } catch (error) {
-    res.status(400).json({ msg: error.message });
+    return res.status(400).json({ msg: error.message });
   }
 };
 
@@ -20,9 +25,19 @@ export const getUserbyId = async (req, res) => {
   }
 };
 
+// create user
 export const createUser = async (req, res) => {
   try {
-    const user = new User(req.body);
+    const { firstname, lastname, email, password, role } = req.body;
+    const salt = await bcrypt.genSalt(10);
+    const hashpwd = await bcrypt.hash(password, salt);
+    const user = new User({
+      firstname: firstname,
+      password: hashpwd,
+      email: email,
+      lastname: lastname,
+      role: role,
+    });
     await user.save();
     res.status(201).json({ msg: "data berhasil dibuat" });
   } catch (error) {
@@ -30,23 +45,27 @@ export const createUser = async (req, res) => {
   }
 };
 
+// update user
 export const updateUser = async (req, res) => {
   const { id } = req.params;
-  const { username, password, email, name, gender, age } = req.body;
+  const { firstname, lastname, email, password } = req.body;
   try {
     const user = await User.findById(id);
     if (!user) {
       return res.status(404).json({ msg: "user tidak ditemukan" });
     }
-    if (username) user.username = username;
+    if (firstname) user.firstname = firstname;
+    if (lastname) user.lastname = lastname;
     if (email) user.email = email;
-    if (name) user.name = name;
-    if (gender) user.gender = gender;
-    if (age) user.age = age;
-    // to do enscrypt the password
-    if (password) user.password = password;
+
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      const hashpwd = await bcrypt.hash(password, salt);
+      user.password = hashpwd;
+    }
+
     const updatedUser = await user.save();
-    res.status(202).json({ msg: updatedUser });
+    res.status(202).json({ msg: "user berhasil diupdate" });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
@@ -55,6 +74,9 @@ export const updateUser = async (req, res) => {
 export const deleteUser = async (req, res) => {
   const { id } = req.params;
   try {
+    if (!req.superAccess){
+      return res.status(403).json({msg: "maaf anda bukan admin"})
+    }
     const user = await User.findById(id);
     if (!user) {
       return res.status(404).json({ msg: "user tidak ditemukan" });

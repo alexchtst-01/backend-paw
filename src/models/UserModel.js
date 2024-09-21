@@ -2,7 +2,11 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
-    username: {
+    firstname: {
+      type: String,
+      required: true,
+    },
+    lastname: {
       type: String,
       required: true,
     },
@@ -15,16 +19,11 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    name: {
-      type: String,
-      required: true,
-    },
     role: {
       type: String,
       required: true,
+      enum: ['user', 'admin']
     },
-    gender: { type: String, enum: ["male", "female"] },
-    age: { type: Number },
   },
   {
     timestamps: true,
