@@ -11,7 +11,9 @@ import loginRoute from "./src/routes/loginRoute.js";
 dotenv.config();
 
 const server = express();
-server.use(cors());
+server.use(cors({
+  origin: "*"
+}));
 server.use(express.json());
 
 mongoose.connect(process.env.MONGO_STRING);
