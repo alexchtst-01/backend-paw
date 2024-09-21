@@ -3,16 +3,18 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
+import cookieParser from 'cookie-parser';
 
 import productRoute from "./src/routes/productRoute.js";
 import userRoute from "./src/routes/userRoute.js";
-import loginRoute from "./src/routes/loginRoute.js";
+import authRoute from "./src/routes/authRoute.js";
 
 dotenv.config();
 
 const server = express();
 server.use(cors());
 server.use(express.json());
+server.use(cookieParser());
 
 server.use(morgan("dev"));
 
@@ -20,7 +22,7 @@ server.get("/", (req, res) => {
   res.send("Backend server PAW kelompok 5");
 });
 
-server.use("/api/v1", loginRoute);
+server.use("/api/v1", authRoute);
 server.use("/api/v1", userRoute);
 server.use("/api/v1", productRoute);
 
