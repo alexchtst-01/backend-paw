@@ -12,8 +12,8 @@ const router = express.Router();
 
 // need protection routes
 router.get("/users", verify, getUser);
-router.get("/users/:id", getUserbyId);
-router.post("/users", createUser);
+router.get("/users/:id", verify, getUserbyId);
+router.post("/users", verify, createUser);
 router.patch("/users/:id", updateUser);
 router.delete("/users/:id", verify, deleteUser);
 

@@ -11,12 +11,16 @@ export const login = async (req, res) => {
 
     const user = await User.findOne({ email: username });
     if (!user) {
-      return res.status(404).json({ msg: "user tidak ditemukan" });
+      return res
+        .status(404)
+        .json({ msg: "user tidak ditemukan", status_succes: false });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(401).json({ msg: "password salah" });
+      return res
+        .status(401)
+        .json({ msg: "password salah", status_succes: false });
     }
 
     const { _id, role, email: uname } = user;
@@ -27,15 +31,17 @@ export const login = async (req, res) => {
       { expiresIn: "7d" }
     );
 
-    res.cookie('token', token, {
+    res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 1000 * 60 * 60 * 10
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 1000 * 60 * 60 * 10,
     });
 
-    return res.status(200).json({ msg: "Login successful", token });
+    return res
+      .status(200)
+      .json({ msg: "Login successful", status_succes: true });
   } catch (error) {
-    return res.status(500).json({ msg: "Login failed: " + error.message });
+    return res.status(500).json({ msg: error.message, status_succes: false });
   }
 };
