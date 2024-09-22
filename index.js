@@ -15,7 +15,7 @@ dotenv.config();
 const server = express();
 server.use(
   cors({
-    origin: "http://localhost:3000", // Change this for production
+    origin: "http://localhost:3000",
     credentials: true,
   })
 );
