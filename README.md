@@ -41,7 +41,7 @@ project-folder/
 └── index.js
 
 
-### NAMA KELOMPOK
+
 
 
 
@@ -64,3 +64,6 @@ buka postman dan hit get entry point berikut ini
 
 Hasilnya kalian akan diberikan response: 
 **Backend server PAW kelompok 5**
+
+### API Dokumentasi 
+    https://muddy-linen-bc9.notion.site/FurniStock-API-Docs-cbb19bd3f8644a2db0c345d831f49835
