@@ -5,7 +5,15 @@ export const getProductbyID = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const product = await Product.findById(id);
+    if (req.superAccess) {
+      const products = await Product.findById(id);
+      return res.status(200).json(products);
+    }
+
+    const product = await Product.find({
+      _id: id,
+      userID: req.user.id,
+    });
 
     if (!product) {
       return res.status(404).json({ msg: "product tidak ditemukan" });
@@ -68,7 +76,7 @@ export const updateProduct = async (req, res) => {
       if (size) existProduct.size = size;
       if (location) existProduct.location = location;
       await existProduct.save();
-      return res.status(212).josn({ msg: "berhasil diupdate" });
+      return res.status(201).josn({ msg: "berhasil diupdate" });
     } else {
       if (req.user.id === existProduct.userID) {
         if (name) existProduct.name = name;
@@ -77,7 +85,7 @@ export const updateProduct = async (req, res) => {
         if (size) existProduct.size = size;
         if (location) existProduct.location = location;
         await existProduct.save();
-        return res.status(212).josn({ msg: "berhasil diupdate" });
+        return res.status(201).josn({ msg: "berhasil diupdate" });
       }
       return res.status(403).json({ msg: "akses terlarang" });
     }
@@ -91,11 +99,18 @@ export const deleteProduct = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const deletedProduct = await Product.findByIdAndDelete(id);
-
-    if (!deletedProduct) {
+    if (req.superAccess) {
+      await Product.findByIdAndDelete(id);
+      return res.status(403).json({ msg: "product berhasil dihapus" });
+    }
+    const existProduct = await Product.find({
+      _id: id,
+      userID: req.user.id,
+    });
+    if (!existProduct) {
       return res.status(404).json({ msg: "product tidak ditemukan" });
     }
+    await Product.findByIdAndDelete(id);
 
     res.status(200).json({ msg: "produck berhasil dihapus" });
   } catch (error) {
