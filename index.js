@@ -8,12 +8,13 @@ import cookieParser from 'cookie-parser';
 import productRoute from "./src/routes/productRoute.js";
 import userRoute from "./src/routes/userRoute.js";
 import authRoute from "./src/routes/authRoute.js";
+import dummyProductRoute from "./src/routes/dummyprodRoute.js";
 
 dotenv.config();
 
 const server = express();
 server.use(cors({
-  origin: "*"
+  origin: "*",
 }));
 server.use(express.json());
 server.use(cookieParser());
@@ -27,6 +28,7 @@ server.get("/", (req, res) => {
 server.use("/api/v1", authRoute);
 server.use("/api/v1", userRoute);
 server.use("/api/v1", productRoute);
+server.use("/api/v1", dummyProductRoute);
 
 mongoose.connect(process.env.MONGO_STRING);
 mongoose.connection.on("error", err => {
