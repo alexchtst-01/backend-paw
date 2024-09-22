@@ -1,4 +1,4 @@
-import DummyProduct from "../models/DummyProduct";
+import DummyProduct from "../models/DummyProduct.js";
 
 // Get product by ID
 export const getProductbyID = async (req, res) => {
