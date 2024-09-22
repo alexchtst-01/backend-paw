@@ -31,9 +31,9 @@ export const getUserbyId = async (req, res) => {
 // create user
 export const createUser = async (req, res) => {
   try {
-    if (!req.superAccess) {
-      return res.status(403).json({ msg: "maaf anda bukan admin" });
-    }
+    // if (!req.superAccess) {
+    //   return res.status(403).json({ msg: "maaf anda bukan admin" });
+    // }
     const { firstname, lastname, email, password, role } = req.body;
     const salt = await bcrypt.genSalt(10);
     const hashpwd = await bcrypt.hash(password, salt);
@@ -80,9 +80,9 @@ export const updateUser = async (req, res) => {
 export const deleteUser = async (req, res) => {
   const { id } = req.params;
   try {
-    // if (!req.superAccess) {
-    //   return res.status(403).json({ msg: "maaf anda bukan admin" });
-    // }
+    if (!req.superAccess) {
+      return res.status(403).json({ msg: "maaf anda bukan admin" });
+    }
     const user = await User.findById(id);
     if (!user) {
       return res.status(404).json({ msg: "user tidak ditemukan" });
