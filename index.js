@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
-import cookieParser from 'cookie-parser';
+import cookieParser from "cookie-parser";
 
 import productRoute from "./src/routes/productRoute.js";
 import userRoute from "./src/routes/userRoute.js";
@@ -13,13 +13,14 @@ import dummyProductRoute from "./src/routes/dummyprodRoute.js";
 dotenv.config();
 
 const server = express();
-server.use(cors({
-  origin: "http://localhost:3000",
-  credentials: true,
-}));
+server.use(
+  cors({
+    origin: "http://localhost:3000", // Change this for production
+    credentials: true,
+  })
+);
 server.use(express.json());
 server.use(cookieParser());
-
 server.use(morgan("dev"));
 
 server.get("/", (req, res) => {
@@ -31,13 +32,20 @@ server.use("/api/v1", userRoute);
 server.use("/api/v1", productRoute);
 server.use("/api/v1", dummyProductRoute);
 
-mongoose.connect(process.env.MONGO_STRING);
-mongoose.connection.on("error", err => {
-  console.log("err", err)
-})
-mongoose.connection.on("connected", (err, res) => {
-  console.log("conection success to mongodb atlas")
-  server.listen(process.env.SERVER_PORT, () => {
-    console.log(`server up and running in localhost:${process.env.SERVER_PORT}`)
-  })
-})
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_STRING, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("Connected to MongoDB Atlas");
+    server.listen(process.env.SERVER_PORT, () => {
+      console.log(`Server running on port ${process.env.SERVER_PORT}`);
+    });
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error);
+    process.exit(1);
+  }
+};
+
+connectDB();
