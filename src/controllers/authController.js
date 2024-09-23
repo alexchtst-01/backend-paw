@@ -32,11 +32,11 @@ export const login = async (req, res) => {
     );
 
     res.cookie("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      maxAge: 1000 * 60 * 60 * 10,
+      secure: false,  // Secure only in production
+      // sameSite: "none",  // Keep this for cross-origin requests
+      maxAge: 1000 * 60 * 60 * 10,  // Cookie lifetime
     });
+    
 
     return res
       .status(200)
